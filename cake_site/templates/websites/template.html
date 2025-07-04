@@ -1,0 +1,38 @@
+{% load static %}
+<link href="{% static 'src/styles.css' %}" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Cake Bliss{% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-pink-50 text-gray-800 font-sans">
+
+  <!-- Navbar -->
+  <header class="bg-white shadow-md">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+      <h1 class="text-2xl font-bold text-pink-600">Cake Bliss</h1>
+      <nav class="space-x-6">
+        <a href="{% url 'home' %}" class="text-gray-600 hover:text-pink-600">Home</a>
+        <a href="{% url 'menu' %}" class="text-gray-600 hover:text-pink-600">Menu</a>
+        <a href="{% url 'about' %}" class="text-gray-600 hover:text-pink-600">About</a>
+        <a href="{% url 'contact' %}" class="text-gray-600 hover:text-pink-600">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Page Content -->
+  <main>
+    {% block content %}
+    {% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white py-6 text-center text-gray-500 text-sm mt-12">
+    © 2025 Cake Bliss. All rights reserved.
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Cake Bliss | Fresh Cakes Delivered{% endblock %}
+
+{% block meta_description %}Order fresh, delicious cakes online and get them delivered to your doorstep. Perfect for birthdays, celebrations, and special occasions. Fast delivery guaranteed!{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+  <!-- Background Pattern -->
+  <div class="absolute inset-0 bg-gradient-to-br from-pink-100 via-orange-100 to-yellow-100">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,107,157,0.1)_0%,transparent_50%)] bg-         [radial-gradient(circle_at_70%_80%,rgba(255,234,167,0.2)_0%,transparent_50%)]"></div>
+  </div>
+  
+  <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+    <!-- Left Content -->
+    <div class="text-center lg:text-left">
+      <h1 class="text-5xl md:text-6xl lg:text-7xl font-display font-bold text-gray-900 mb-6">
+        Sweet Dreams
+        <span class="bg-gradient-to-r from-pink-500 to-yellow-400 bg-clip-text text-transparent block">Delivered</span>
+      </h1>
+      <p class="text-lg sm:text-xl md:text-2xl text-gray-700 mb-8 leading-relaxed">
+        Fresh, handcrafted cakes made with love and delivered to your doorstep. Perfect for every celebration!
+      </p>
+
+      <!-- CTA Buttons -->
+      <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+        <a href="{% url 'store' %}" class="bg-pink-600 hover:bg-pink-700 text-white px-8 py-4 rounded-full font-semibold text-lg shadow-lg transition-all">
+          <i class="fas fa-store mr-2"></i>Visit Store
+        </a>
+        <a href="{% url 'order' %}" class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-8 py-4 rounded-full font-semibold text-lg shadow-lg transition-all">
+          <i class="fas fa-shopping-cart mr-2"></i>Order Now
+        </a>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-3 gap-6 mt-12 pt-8 border-t border-gray-300">
+        <div class="text-center">
+          <div class="text-3xl font-bold text-pink-600">1000+</div>
+          <div class="text-gray-600">Happy Customers</div>
+        </div>
+        <div class="text-center">
+          <div class="text-3xl font-bold text-pink-600">50+</div>
+          <div class="text-gray-600">Cake Varieties</div>
+        </div>
+        <div class="text-center">
+          <div class="text-3xl font-bold text-pink-600">24/7</div>
+          <div class="text-gray-600">Delivery</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Content - Hero Image -->
+    <div class="relative">
+      <div class="relative z-10 bg-white rounded-3xl shadow-2xl p-8 transform rotate-3 hover:rotate-0 transition-transform duration-500">
+        <div class="text-center">
+          <h3 class="text-2xl font-display font-bold text-gray-900 mb-2">Today's Special</h3>
+          <p class="text-gray-600 mb-4">Chocolate Fudge Cake</p>
+          <div class="text-3xl font-bold text-pink-600">$24.99</div>
+        </div>
+      </div>
+
+      <!-- Floating Elements -->
+      <div class="absolute top-10 -left-4 text-4xl animate-bounce">🎂</div>
+      <div class="absolute bottom-10 -right-4 text-4xl animate-bounce" style="animation-delay: 1s;">🍰</div>
+    </div>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-20 bg-white">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl md:text-5xl font-display font-bold text-gray-900 mb-4">Why Choose Cake Bliss?</h2>
+      <p class="text-xl text-gray-600 max-w-2xl mx-auto">We're committed to delivering not just cakes, but moments of joy and celebration.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- Feature 1 -->
+      <div class="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-shadow">
+        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop&crop=center" alt="Fast Delivery" class="w-full h-48 object-cover hover:scale-105 transition-transform duration-300">
+        <div class="p-6">
+          <h3 class="text-xl font-display font-bold text-gray-900 mb-2">Fast Delivery</h3>
+          <p class="text-gray-600">Same-day delivery available. We ensure your cakes arrive fresh and on time for your special moments.</p>
+        </div>
+      </div>
+
+      <!-- Feature 2 -->
+      <div class="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-shadow">
+        <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=300&fit=crop&crop=center" alt="Expert Bakers" class="w-full h-48 object-cover hover:scale-105 transition-transform duration-300">
+        <div class="p-6">
+          <h3 class="text-xl font-display font-bold text-gray-900 mb-2">Expert Bakers</h3>
+          <p class="text-gray-600">Our skilled bakers use premium ingredients to create cakes that taste as amazing as they look.</p>
+        </div>
+      </div>
+
+      <!-- Feature 3 -->
+      <div class="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-shadow">
+        <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop&crop=center" alt="Custom Designs" class="w-full h-48 object-cover hover:scale-105 transition-transform duration-300">
+        <div class="p-6">
+          <h3 class="text-xl font-display font-bold text-gray-900 mb-2">Custom Designs</h3>
+          <p class="text-gray-600">Personalize your cake with custom designs, messages, and decorations for any celebration.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
