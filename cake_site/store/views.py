@@ -19,10 +19,6 @@ def about(request):
 def contact(request):
     return render(request, 'contact.html')
 
-def search(request):
-    query = request.GET.get('q', '')
-    return render(request, 'search_cakes.html', {'query': query})
-
 def cakes(request):
     return render(request, 'cakes.html')
 
