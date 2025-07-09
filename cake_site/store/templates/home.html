@@ -1,559 +1,234 @@
+{% comment %} {% load static tailwind_tags %} {% endcomment %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
+    {% comment %} {% tailwind_css %} {% endcomment %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sweet Delights - Premium Cake Delivery | Home</title>
+    <title>Cakestry - Artistry in Every Slice</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <style>
+        /* Custom styles to extend Tailwind */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a1a2e; /* Dark background for min dark theme */
+        }
+        .font-brand {
+            font-family: 'Dancing Script', cursive;
+        }
+        /* Smart entry animation */
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+        .animate-fade-in-up {
+            /* This can be applied with JS on scroll, but for the demo, it runs on load */
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        /* Add a class to stagger animations */
+        .stagger-delay-1 { animation-delay: 0.2s; }
+        .stagger-delay-2 { animation-delay: 0.4s; }
+        .stagger-delay-3 { animation-delay: 0.6s; }
+    </style>
+
     <script>
+        // Custom Tailwind configuration with the new color palette for dark theme
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        'chocolate': '#8B4513',
-                        'chocolate-dark': '#654321',
-                        'royal-purple': '#663399',
-                        'royal-blue': '#4169E1',
-                        'cherry-red': '#DC143C',
-                        'cream': '#F5F5DC'
+                        'chocolate': {
+                            'light': '#A0522D', // Might appear lighter on dark, keep for contrast
+                            'DEFAULT': '#5D4037', // Medium chocolate
+                            'dark': '#3E2723',   // Very dark chocolate, almost black
+                        },
+                        'purple': {
+                            'light': '#C4B5FD', // Lighter purple for accents
+                            'DEFAULT': '#8B5CF6', // Default vibrant purple
+                            'dark': '#5B21B6',   // Darker purple
+                        },
+                        'blue': {
+                            'light': '#A5B4FC', // Lighter blue for accents
+                            'DEFAULT': '#6366F1', // Default vibrant blue
+                            'dark': '#4338CA',   // Darker blue
+                        },
+                        'cream': '#F8F0E3', // Light cream for text/accents on dark background
+                        'dark-bg': { // New dark background shades
+                            'DEFAULT': '#1A1A2E', // Primary very dark blue-purple
+                            'lighter': '#2A2A4A', // Slightly lighter dark for sections
+                            'lightest': '#3A3A6A', // Even lighter dark for cards/elements
+                        },
                     }
                 }
             }
         }
     </script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-        body { font-family: 'Poppins', sans-serif; }
-        .animate-float { animation: float 3s ease-in-out infinite; }
-        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
-    </style>
 </head>
-<body class="bg-gray-50">
-    <!-- Navigation -->
-    <nav class="bg-white shadow-lg sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center">
-                    <div class="text-2xl font-bold bg-gradient-to-r from-chocolate to-royal-purple bg-clip-text text-transparent">
-                        🍰 Sweet Delights
+<body class="text-cream antialiased bg-dark-bg">
+
+    <header x-data="{ isOpen: false }" class="sticky top-0 z-50 bg-dark-bg/80 backdrop-blur-lg shadow-sm">
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="{% url 'home' %}" class="text-3xl font-bold text-cream font-brand">Cakestry</a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="{% url 'home' %}" class="text-cream transition duration-300 hover:text-purple">Home</a>
+                    <a href="{% url 'cakes' %}" class="text-cream transition duration-300 hover:text-purple">Our Cakes</a>
+                    <a href="#" class="text-cream transition duration-300 hover:text-purple">About Us</a>
+                    <a href="{% url 'contact' %}" class="bg-gradient-to-br from-blue-dark via-purple-dark to-chocolate-dark text-white px-8 py-4 rounded-full text-lg font-semibold shadow-xl transition-all duration-300 hover:shadow-2xl transform hover:scale-105 inline-block">Contact</a>
+                </div>
+                <div class="md:hidden">
+                    <button @click="isOpen = !isOpen" type="button" class="text-cream focus:outline-none">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path :class="{'hidden': isOpen, 'inline-block': !isOpen }" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path><path :class="{'hidden': !isOpen, 'inline-block': isOpen }" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+            </div>
+            <div x-show="isOpen" x-transition class="md:hidden mt-4" @click.away="isOpen = false">
+                <a href="{% url 'home' %}" class="block px-4 py-2 text-cream transition duration-300 hover:bg-purple-light/20 rounded">Home</a>
+                <a href="{% url 'cakes' %}" class="block px-4 py-2 text-cream transition duration-300 hover:bg-purple-light/20 rounded">Our Cakes</a>
+                <a href="{% url 'about' %}" class="block px-4 py-2 text-cream transition duration-300 hover:bg-purple-light/20 rounded">About Us</a>
+                <a href="{% url 'contact' %}" class="block mt-2 bg-gradient-to-br from-blue to-purple text-white text-center px-5 py-2 rounded-full shadow-lg">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="relative overflow-hidden bg-gradient-to-br from-blue-dark/20 via-purple-dark/20 to-dark-bg/10 pt-20 pb-24 md:pt-32 md:pb-32">
+            <div class="container mx-auto px-6 text-center">
+                <div class="relative z-10">
+                    <h1 class="text-5xl md:text-7xl font-bold leading-tight animate-fade-in-up">
+                        <span class="text-cream">Artistry in Every </span>
+                        <span class="font-brand bg-gradient-to-r from-blue via-purple to-chocolate-light text-transparent bg-clip-text">Slice</span>
+                    </h1>
+                    <p class="mt-4 text-lg md:text-xl max-w-2xl mx-auto text-cream/90 animate-fade-in-up stagger-delay-1">
+                        Experience bespoke cakes that blend exquisite flavors with breathtaking designs. Crafted for moments you'll never forget.
+                    </p>
+                    <div class="mt-10 animate-fade-in-up stagger-delay-2">
+                        <a href="{% url 'store' %}" class="bg-gradient-to-br from-blue-dark via-purple-dark to-chocolate-dark text-white px-8 py-4 rounded-full text-lg font-semibold shadow-xl transition-all duration-300 hover:shadow-2xl transform hover:scale-105 inline-block">
+                            Design Your Dream Cake
+                        </a>
                     </div>
                 </div>
-                <div class="hidden md:flex items-center space-x-6">
-                    <a href="#home" class="text-chocolate hover:text-royal-purple transition">Home</a>
-                    <a href="#cakes" class="text-chocolate hover:text-royal-purple transition">Cakes</a>
-                    <a href="#categories" class="text-chocolate hover:text-royal-purple transition">Categories</a>
-                    <a href="#about" class="text-chocolate hover:text-royal-purple transition">About</a>
-                    <a href="#contact" class="text-chocolate hover:text-royal-purple transition">Contact</a>
-                    <button class="bg-gradient-to-r from-cherry-red to-royal-purple text-white px-4 py-2 rounded-full hover:shadow-lg transition">
-                        🛒 Cart (0)
-                    </button>
-                </div>
+                   <div class="absolute top-0 left-0 w-64 h-64 bg-blue-dark/20 rounded-full blur-3xl opacity-50"></div>
+                <div class="absolute bottom-0 right-0 w-64 h-64 bg-purple-dark/20 rounded-full blur-3xl opacity-50"></div>
             </div>
-        </div>
-    </nav>
+        </section>
 
-    <!-- Hero Section -->
-    <section id="home" class="relative bg-gradient-to-r from-chocolate via-royal-purple to-royal-blue text-cream py-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <h1 class="text-4xl md:text-6xl font-bold mb-6">
-                    Fresh Cakes Delivered
-                    <span class="block text-yellow-200">To Your Door</span>
-                </h1>
-                <p class="text-xl mb-8 max-w-2xl mx-auto text-cream/90">
-                    Indulge in our premium handcrafted cakes made with love and delivered fresh to your doorstep
-                </p>
-                
-                <!-- Search Bar -->
-                <div class="max-w-2xl mx-auto mb-8">
-                    <form method="GET" action="#" class="relative">
-                        <input 
-                            type="text" 
-                            name="q" 
-                            placeholder="Search for cakes (e.g., chocolate, birthday, vanilla...)"
-                            class="w-full py-4 px-6 pr-12 text-chocolate rounded-full text-lg focus:outline-none focus:ring-4 focus:ring-yellow-300 shadow-lg placeholder-chocolate/60"
-                        >
-                        <button type="submit" class="absolute right-3 top-1/2 transform -translate-y-1/2 bg-cherry-red text-white p-2 rounded-full hover:bg-red-700 transition shadow-lg">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                            </svg>
-                        </button>
-                    </form>
+        <section class="py-20 md:py-28 bg-dark-bg-lighter">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16 animate-fade-in-up">
+                    <h2 class="text-4xl md:text-5xl font-bold text-cream">Our Signature Bakes</h2>
+                    <p class="mt-3 text-lg text-cream/90">A glimpse into our most loved and celebrated creations.</p>
                 </div>
-                
-                <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <button class="bg-cream text-chocolate px-8 py-3 rounded-full font-semibold hover:bg-yellow-100 transition shadow-lg">
-                        🛒 Order Now
-                    </button>
-                    <button class="border-2 border-cream text-cream px-8 py-3 rounded-full font-semibold hover:bg-cream hover:text-chocolate transition shadow-lg">
-                        📋 View Menu
-                    </button>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+                    <div class="bg-dark-bg-lightest rounded-xl shadow-lg overflow-hidden group transform transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 animate-fade-in-up stagger-delay-1">
+                        <div class="relative">
+                            <img src="https://images.unsplash.com/photo-1519705273330-3c9c73d1a3a3?w=400&h=300&fit=crop" alt="Galaxy Mousse Cake" class="w-full h-60 object-cover transform transition-transform duration-500 group-hover:scale-110">
+                            <div class="absolute top-0 left-0 p-4 bg-gradient-to-br from-chocolate to-chocolate-dark text-white text-lg font-semibold rounded-tl-full rounded-br-full">
+                                Galaxy Mousse
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <p class="mt-2 text-cream/70">A blueberry and white chocolate mousse with a mesmerizing mirror glaze.</p>
+                            <span class="inline-block mt-4 text-2xl font-bold text-blue-light">$55.00</span>
+                        </div>
+                    </div>
+                    <div class="bg-dark-bg-lightest rounded-xl shadow-lg overflow-hidden group transform transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 animate-fade-in-up stagger-delay-2">
+                        <div class="relative">
+                            <img src="https://images.unsplash.com/photo-1525130413817-d45c1d127c42?w=400&h=300&fit=crop" alt="Lavender Honey Cake" class="w-full h-60 object-cover transform transition-transform duration-500 group-hover:scale-110">
+                            <div class="absolute top-0 left-0 p-4 bg-gradient-to-br from-purple to-purple-dark text-white text-lg font-semibold rounded-tl-full rounded-br-full">
+                                Lavender Dream
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <p class="mt-2 text-cream/70">A delicate honey cake infused with aromatic lavender buttercream.</p>
+                            <span class="inline-block mt-4 text-2xl font-bold text-purple-light">$48.00</span>
+                        </div>
+                    </div>
+                    <div class="bg-dark-bg-lightest rounded-xl shadow-lg overflow-hidden group transform transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 animate-fade-in-up stagger-delay-3">
+                        <div class="relative">
+                            <img src="https://images.unsplash.com/photo-1593642532842-98d7d9f2879e?w=400&h=300&fit=crop" alt="Tiramisu Cake" class="w-full h-60 object-cover transform transition-transform duration-500 group-hover:scale-110">
+                            <div class="absolute top-0 left-0 p-4 bg-gradient-to-br from-chocolate to-chocolate-dark text-white text-lg font-semibold rounded-tl-full rounded-br-full">
+                                Tiramisu Royale
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <p class="mt-2 text-cream/70">Our signature take on the classic, with rich espresso and dark chocolate.</p>
+                            <span class="inline-block mt-4 text-2xl font-bold text-chocolate-light">$50.00</span>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
         
-        <!-- Decorative Elements -->
-        <div class="absolute top-10 left-10 text-6xl opacity-30 animate-pulse">🎂</div>
-        <div class="absolute bottom-10 right-10 text-6xl opacity-30 animate-pulse">🧁</div>
-        <div class="absolute top-1/2 left-1/4 text-4xl opacity-20 animate-bounce">🍰</div>
-        <div class="absolute top-1/3 right-1/4 text-4xl opacity-20 animate-bounce">🍫</div>
-    </section>
+        <section class="py-20 md:py-28 bg-dark-bg-lighter">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16 animate-fade-in-up">
+                    <h2 class="text-4xl md:text-5xl font-bold text-cream">The <span class="font-brand text-purple-light">Cakestry</span> Difference</h2>
+                </div>
+                <div class="grid md:grid-cols-3 gap-12 text-center">
+                    <div class="animate-fade-in-up stagger-delay-1">
+                        <div class="mx-auto bg-gradient-to-br from-blue-dark to-purple-dark text-white h-20 w-20 rounded-full flex items-center justify-center shadow-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+                        </div>
+                        <h3 class="mt-6 text-2xl font-bold text-cream">Premium Ingredients</h3>
+                        <p class="mt-2 text-cream/80">We source only the finest local and organic ingredients for unparalleled flavor.</p>
+                    </div>
+                    <div class="animate-fade-in-up stagger-delay-2">
+                           <div class="mx-auto bg-gradient-to-br from-purple-dark to-chocolate-dark text-white h-20 w-20 rounded-full flex items-center justify-center shadow-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L15.232 5.232z" /></svg>
+                        </div>
+                        <h3 class="mt-6 text-2xl font-bold text-cream">Custom Artwork</h3>
+                        <p class="mt-2 text-cream/80">Your vision is our blueprint. We create edible art tailored to your event's theme.</p>
+                    </div>
+                    <div class="animate-fade-in-up stagger-delay-3">
+                        <div class="mx-auto bg-gradient-to-br from-chocolate-dark to-blue-dark text-white h-20 w-20 rounded-full flex items-center justify-center shadow-lg">
+                               <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+                        </div>
+                        <h3 class="mt-6 text-2xl font-bold text-cream">Baked with Passion</h3>
+                        <p class="mt-2 text-cream/80">Every cake is mixed, baked, and decorated with an abundance of love and care.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    <!-- Featured Cakes Section -->
-    <section id="cakes" class="py-16 bg-gradient-to-br from-white to-cream">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-chocolate to-royal-purple bg-clip-text text-transparent mb-4">
-                    Featured Cakes
-                </h2>
-                <p class="text-chocolate/70 max-w-2xl mx-auto text-lg">
-                    Discover our most popular cakes, each crafted with premium ingredients and artistic flair
-                </p>
+        <section class="bg-gradient-to-br from-blue via-purple to-purple-dark py-20">
+            <div class="container mx-auto px-6 text-center animate-fade-in-up">
+                <h2 class="text-4xl font-bold text-white">Have a Special Occasion Coming Up?</h2>
+                <p class="mt-4 text-lg text-white/90 max-w-2xl mx-auto">Let us craft the perfect centerpiece for your celebration. Get in touch for a personalized consultation.</p>
+                <div class="mt-8">
+                    <a href="#" class="bg-white text-purple-dark px-8 py-4 rounded-full text-lg font-semibold shadow-xl transition-all duration-300 hover:shadow-2xl transform hover:scale-105 inline-block">
+                        Get a Custom Quote
+                    </a>
+                </div>
             </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Chocolate Fudge Cake -->
-                <div class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 group border border-cream">
-                    <div class="relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&h=300&fit=crop" 
-                             alt="Chocolate Fudge Cake" 
-                             class="w-full h-64 object-cover group-hover:scale-110 transition duration-500">
-                        <div class="absolute top-4 right-4 bg-gradient-to-r from-chocolate to-chocolate-dark text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
-                            Chocolate
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-chocolate mb-2">Chocolate Fudge Delight</h3>
-                        <p class="text-chocolate/70 mb-4">Rich, moist chocolate cake with creamy fudge frosting and chocolate chips</p>
-                        <div class="flex items-center justify-between">
-                            <span class="text-2xl font-bold bg-gradient-to-r from-cherry-red to-royal-purple bg-clip-text text-transparent">₹899</span>
-                            <button class="bg-gradient-to-r from-cherry-red to-royal-purple text-white px-6 py-2 rounded-full hover:from-red-700 hover:to-purple-700 transition shadow-lg font-semibold">
-                                Add to Cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Royal Purple Velvet -->
-                <div class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 group border border-cream">
-                    <div class="relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?w=400&h=300&fit=crop" 
-                             alt="Royal Purple Velvet" 
-                             class="w-full h-64 object-cover group-hover:scale-110 transition duration-500">
-                        <div class="absolute top-4 right-4 bg-gradient-to-r from-royal-purple to-royal-blue text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
-                            Royal Special
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-chocolate mb-2">Royal Purple Velvet</h3>
-                        <p class="text-chocolate/70 mb-4">Luxurious purple velvet cake with cream cheese frosting and gold accents</p>
-                        <div class="flex items-center justify-between">
-                            <span class="text-2xl font-bold bg-gradient-to-r from-cherry-red to-royal-purple bg-clip-text text-transparent">₹1299</span>
-                            <button class="bg-gradient-to-r from-cherry-red to-royal-purple text-white px-6 py-2 rounded-full hover:from-red-700 hover:to-purple-700 transition shadow-lg font-semibold">
-                                Add to Cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Berry Bliss Cake -->
-                <div class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 group border border-cream">
-                    <div class="relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&h=300&fit=crop" 
-                             alt="Berry Bliss Cake" 
-                             class="w-full h-64 object-cover group-hover:scale-110 transition duration-500">
-                        <div class="absolute top-4 right-4 bg-gradient-to-r from-cherry-red to-royal-blue text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
-                            Berry Special
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-chocolate mb-2">Berry Bliss Supreme</h3>
-                        <p class="text-chocolate/70 mb-4">Fresh mixed berries with vanilla sponge and whipped cream layers</p>
-                        <div class="flex items-center justify-between">
-                            <span class="text-2xl font-bold bg-gradient-to-r from-cherry-red to-royal-purple bg-clip-text text-transparent">₹999</span>
-                            <button class="bg-gradient-to-r from-cherry-red to-royal-purple text-white px-6 py-2 rounded-full hover:from-red-700 hover:to-purple-700 transition shadow-lg font-semibold">
-                                Add to Cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
+        </section>
+    </main>
 
-                <!-- Vanilla Dream -->
-                <div class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 group border border-cream">
-                    <div class="relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=400&h=300&fit=crop" 
-                             alt="Vanilla Dream Cake" 
-                             class="w-full h-64 object-cover group-hover:scale-110 transition duration-500">
-                        <div class="absolute top-4 right-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
-                            Classic
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-chocolate mb-2">Vanilla Dream</h3>
-                        <p class="text-chocolate/70 mb-4">Classic vanilla sponge with buttercream frosting and fresh flowers</p>
-                        <div class="flex items-center justify-between">
-                            <span class="text-2xl font-bold bg-gradient-to-r from-cherry-red to-royal-purple bg-clip-text text-transparent">₹749</span>
-                            <button class="bg-gradient-to-r from-cherry-red to-royal-purple text-white px-6 py-2 rounded-full hover:from-red-700 hover:to-purple-700 transition shadow-lg font-semibold">
-                                Add to Cart
-                            </button>
-                        </div>
-                    </div>
+    <footer class="bg-chocolate-dark text-cream">
+        <div class="container mx-auto px-6 py-12">
+            <div class="text-center">
+                <h3 class="text-3xl text-cream font-brand bg-gradient-to-r from-blue via-purple to-chocolate-light text-transparent bg-clip-text">Cakestry</h3>
+                <p class="mt-2 text-sm text-cream/80">Artistry in Every Slice. Serving joy since 2025.</p>
+                <div class="border-t border-chocolate-light mt-8 pt-8 text-center text-sm text-cream/60">
+                    <p>&copy; 2025 Cakestry. All Rights Reserved.</p>
                 </div>
-
-                <!-- Red Velvet -->
-                <div class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 group border border-cream">
-                    <div class="relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1586985289906-406988974504?w=400&h=300&fit=crop" 
-                             alt="Red Velvet Cake" 
-                             class="w-full h-64 object-cover group-hover:scale-110 transition duration-500">
-                        <div class="absolute top-4 right-4 bg-gradient-to-r from-red-600 to-red-800 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
-                            Popular
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-chocolate mb-2">Red Velvet Classic</h3>
-                        <p class="text-chocolate/70 mb-4">Traditional red velvet with cream cheese frosting and velvety texture</p>
-                        <div class="flex items-center justify-between">
-                            <span class="text-2xl font-bold bg-gradient-to-r from-cherry-red to-royal-purple bg-clip-text text-transparent">₹949</span>
-                            <button class="bg-gradient-to-r from-cherry-red to-royal-purple text-white px-6 py-2 rounded-full hover:from-red-700 hover:to-purple-700 transition shadow-lg font-semibold">
-                                Add to Cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Tiramisu -->
-                <div class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 group border border-cream">
-                    <div class="relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1571115764595-644a1f56a55c?w=400&h=300&fit=crop" 
-                             alt="Tiramisu Cake" 
-                             class="w-full h-64 object-cover group-hover:scale-110 transition duration-500">
-                        <div class="absolute top-4 right-4 bg-gradient-to-r from-amber-600 to-amber-800 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
-                            Premium
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-chocolate mb-2">Tiramisu Supreme</h3>
-                        <p class="text-chocolate/70 mb-4">Italian classic with coffee-soaked ladyfingers and mascarpone cream</p>
-                        <div class="flex items-center justify-between">
-                            <span class="text-2xl font-bold bg-gradient-to-r from-cherry-red to-royal-purple bg-clip-text text-transparent">₹1149</span>
-                            <button class="bg-gradient-to-r from-cherry-red to-royal-purple text-white px-6 py-2 rounded-full hover:from-red-700 hover:to-purple-700 transition shadow-lg font-semibold">
-                                Add to Cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Categories Section -->
-    <section id="categories" class="py-16 bg-gradient-to-br from-cream to-yellow-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-chocolate to-royal-purple bg-clip-text text-transparent mb-4">
-                    Cake Categories
-                </h2>
-                <p class="text-chocolate/70 text-lg">Browse our delicious collection by category</p>
-            </div>
-            
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                <div class="text-center group cursor-pointer">
-                    <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 group-hover:bg-gradient-to-br group-hover:from-cherry-red group-hover:to-royal-purple group-hover:text-white border border-cream">
-                        <div class="text-5xl mb-4 group-hover:animate-bounce">🎂</div>
-                        <h3 class="font-bold text-lg">Birthday Cakes</h3>
-                        <p class="text-sm opacity-70 mt-2">Special celebration cakes</p>
-                    </div>
-                </div>
-                <div class="text-center group cursor-pointer">
-                    <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 group-hover:bg-gradient-to-br group-hover:from-royal-purple group-hover:to-royal-blue group-hover:text-white border border-cream">
-                        <div class="text-5xl mb-4 group-hover:animate-bounce">💒</div>
-                        <h3 class="font-bold text-lg">Wedding Cakes</h3>
-                        <p class="text-sm opacity-70 mt-2">Elegant wedding desserts</p>
-                    </div>
-                </div>
-                <div class="text-center group cursor-pointer">
-                    <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 group-hover:bg-gradient-to-br group-hover:from-chocolate group-hover:to-chocolate-dark group-hover:text-white border border-cream">
-                        <div class="text-5xl mb-4 group-hover:animate-bounce">🍫</div>
-                        <h3 class="font-bold text-lg">Chocolate</h3>
-                        <p class="text-sm opacity-70 mt-2">Rich chocolate creations</p>
-                    </div>
-                </div>
-                <div class="text-center group cursor-pointer">
-                    <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 group-hover:bg-gradient-to-br group-hover:from-green-500 group-hover:to-green-700 group-hover:text-white border border-cream">
-                        <div class="text-5xl mb-4 group-hover:animate-bounce">🌿</div>
-                        <h3 class="font-bold text-lg">Sugar-Free</h3>
-                        <p class="text-sm opacity-70 mt-2">Healthy guilt-free options</p>
-                    </div>
-                </div>
-                <div class="text-center group cursor-pointer">
-                    <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 group-hover:bg-gradient-to-br group-hover:from-pink-500 group-hover:to-pink-700 group-hover:text-white border border-cream">
-                        <div class="text-5xl mb-4 group-hover:animate-bounce">🧁</div>
-                        <h3 class="font-bold text-lg">Cupcakes</h3>
-                        <p class="text-sm opacity-70 mt-2">Individual sweet treats</p>
-                    </div>
-                </div>
-                <div class="text-center group cursor-pointer">
-                    <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 group-hover:bg-gradient-to-br group-hover:from-orange-500 group-hover:to-orange-700 group-hover:text-white border border-cream">
-                        <div class="text-5xl mb-4 group-hover:animate-bounce">🎃</div>
-                        <h3 class="font-bold text-lg">Seasonal</h3>
-                        <p class="text-sm opacity-70 mt-2">Holiday special cakes</p>
-                    </div>
-                </div>
-                <div class="text-center group cursor-pointer">
-                    <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 group-hover:bg-gradient-to-br group-hover:from-indigo-500 group-hover:to-indigo-700 group-hover:text-white border border-cream">
-                        <div class="text-5xl mb-4 group-hover:animate-bounce">🎨</div>
-                        <h3 class="font-bold text-lg">Custom</h3>
-                        <p class="text-sm opacity-70 mt-2">Personalized designs</p>
-                    </div>
-                </div>
-                <div class="text-center group cursor-pointer">
-                    <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 group-hover:bg-gradient-to-br group-hover:from-teal-500 group-hover:to-teal-700 group-hover:text-white border border-cream">
-                        <div class="text-5xl mb-4 group-hover:animate-bounce">🌟</div>
-                        <h3 class="font-bold text-lg">Premium</h3>
-                        <p class="text-sm opacity-70 mt-2">Luxury cake collection</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Why Choose Us Section -->
-    <section id="about" class="py-16 bg-gradient-to-br from-white to-cream">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-chocolate to-royal-purple bg-clip-text text-transparent mb-4">
-                    Why Choose Sweet Delights?
-                </h2>
-                <p class="text-chocolate/70 text-lg">Experience the difference with our premium cake delivery service</p>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="text-center p-6 bg-white rounded-2xl shadow-lg hover:shadow-xl transition border border-cream">
-                    <div class="text-5xl mb-4 animate-float">🚚</div>
-                    <h3 class="font-bold text-xl text-chocolate mb-2">Fast Delivery</h3>
-                    <p class="text-chocolate/70">Same-day delivery available. Fresh cakes delivered within 2-4 hours of ordering</p>
-                </div>
-                <div class="text-center p-6 bg-white rounded-2xl shadow-lg hover:shadow-xl transition border border-cream">
-                    <div class="text-5xl mb-4 animate-float">👩‍🍳</div>
-                    <h3 class="font-bold text-xl text-chocolate mb-2">Expert Bakers</h3>
-                    <p class="text-chocolate/70">Skilled pastry chefs with years of experience crafting perfect cakes</p>
-                </div>
-                <div class="text-center p-6 bg-white rounded-2xl shadow-lg hover:shadow-xl transition border border-cream">
-                    <div class="text-5xl mb-4 animate-float">🌟</div>
-                    <h3 class="font-bold text-xl text-chocolate mb-2">Premium Quality</h3>
-                    <p class="text-chocolate/70">Only the finest ingredients used in every cake we create</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="py-16 bg-gradient-to-br from-chocolate to-royal-purple text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">Get In Touch</h2>
-                <p class="text-white/90 text-lg">Have questions? We'd love to hear from you!</p>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                <div>
-                    <h3 class="text-2xl font-bold mb-6">Contact Information</h3>
-                    <div class="space-y-4">
-                        <div class="flex items-center">
-                            <div class="text-2xl mr-4">📍</div>
-                            <div>
-                                <p class="font-semibold">Address</p>
-                                <p class="text-white/80">123 Baker Street, Sweet City, SC 12345</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="text-2xl mr-4">📞</div>
-                            <div>
-                                <p class="font-semibold">Phone</p>
-                                <p class="text-white/80">+91 98765 43210</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="text-2xl mr-4">📧</div>
-                            <div>
-                                <p class="font-semibold">Email</p>
-                                <p class="text-white/80">orders@sweetdelights.com</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="text-2xl mr-4">🕒</div>
-                            <div>
-                                <p class="font-semibold">Hours</p>
-                                <p class="text-white/80">Mon-Sun: 8:00 AM - 10:00 PM</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div>
-                    <h3 class="text-2xl font-bold mb-6">Send us a Message</h3>
-                    <form class="space-y-4">
-                        <div>
-                            <input type="text" placeholder="Your Name" class="w-full px-4 py-3 rounded-lg text-chocolate focus:outline-none focus:ring-2 focus:ring-yellow-300">
-                        </div>
-                        <div>
-                            <input type="email" placeholder="Your Email" class="w-full px-4 py-3 rounded-lg text-chocolate focus:outline-none focus:ring-2 focus:ring-yellow-300">
-                        </div>
-                        <div>
-                            <textarea placeholder="Your Message" rows="4" class="w-full px-4 py-3 rounded-lg text-chocolate focus:outline-none focus:ring-2 focus:ring-yellow-300"></textarea>
-                        </div>
-                        <button type="submit" class="bg-cream text-chocolate px-8 py-3 rounded-lg font-semibold hover:bg-yellow-100 transition shadow-lg">
-                            Send Message
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-chocolate-dark text-cream py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div>
-                    <div class="text-2xl font-bold mb-4">🍰 Sweet Delights</div>
-                    <p class="text-cream/80">Premium cakes delivered fresh to your door. Made with love, delivered with care.</p>
-                </div>
-                <div>
-                    <h4 class="font-bold mb-4">Quick Links</h4>
-                    <ul class="space-y-2 text-cream/80">
-                        <li><a href="#home" class="hover:text-white transition">Home</a></li>
-                        <li><a href="#cakes" class="hover:text-white transition">Cakes</a></li>
-                        <li><a href="#categories" class="hover:text-white transition">Categories</a></li>
-                        <li><a href="#about" class="hover:text-white transition">About</a></li>
-                        <li><a href="#contact" class="hover:text-white transition">Contact</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-bold mb-4">Categories</h4>
-                    <ul class="space-y-2 text-cream/80">
-                        <li><a href="#" class="hover:text-white transition">Birthday Cakes</a></li>
-                        <li><a href="#" class="hover:text-white transition">Wedding Cakes</a></li>
-                        <li><a href="#" class="hover:text-white transition">Chocolate Cakes</a></li>
-                        <li><a href="#" class="hover:text-white transition">Custom Cakes</a></li>
-                        <li><a href="#" class="hover:text-white transition">Sugar-Free</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-bold mb-4">Follow Us</h4>
-                    <div class="flex space-x-4">
-                        <a href="#" class="text-2xl hover:text-white transition">📘</a>
-                        <a href="#" class="text-2xl hover:text-white transition">📷</a>
-                        <a href="#" class="text-2xl hover:text-white transition">🐦</a>
-                        <a href="#" class="text-2xl hover:text-white transition">💬</a>
-                    </div>
-                    <div class="mt-4">
-                        <p class="font-semibold mb-2">Newsletter</p>
-                        <div class="flex">
-                            <input type="email" placeholder="Your email" class="flex-1 px-3 py-2 rounded-l-lg text-chocolate focus:outline-none">
-                            <button class="bg-cherry-red px-4 py-2 rounded-r-lg hover:bg-red-700 transition">Subscribe</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="border-t border-cream/20 mt-8 pt-8 text-center text-cream/80">
-                <p>&copy; 2024 Sweet Delights. All rights reserved. Made with ❤️ for cake lovers.</p>
             </div>
         </div>
     </footer>
 
-    <script>
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Add to cart functionality
-        document.querySelectorAll('button:contains("Add to Cart")').forEach(button => {
-            button.addEventListener('click', function() {
-                // Simple cart counter update
-                const cartButton = document.querySelector('button:contains("Cart")');
-                if (cartButton) {
-                    const currentCount = parseInt(cartButton.textContent.match(/\d+/)[0]) || 0;
-                    cartButton.textContent = `🛒 Cart (${currentCount + 1})`;
-                }
-                
-                // Show success message
-                this.textContent = 'Added!';
-                this.style.background = 'linear-gradient(to right, #22c55e, #16a34a)';
-                
-                setTimeout(() => {
-                    this.textContent = 'Add to Cart';
-                    this.style.background = 'linear-gradient(to right, #DC143C, #663399)';
-                }, 2000);
-            });
-        });
-
-        // Search functionality
-        document.querySelector('form[action="#"]').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const searchQuery = this.querySelector('input[name="q"]').value.toLowerCase();
-            
-            if (searchQuery) {
-                alert(`Searching for: ${searchQuery}\n\nThis would normally redirect to search results page.`);
-            }
-        });
-
-        // Contact form submission
-        document.querySelector('form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Thank you for your message! We will get back to you soon.');
-            this.reset();
-        });
-
-        // Newsletter subscription
-        document.querySelector('input[type="email"] + button').addEventListener('click', function(e) {
-            e.preventDefault();
-            const email = this.previousElementSibling.value;
-            if (email) {
-                alert(`Thank you for subscribing with: ${email}`);
-                this.previousElementSibling.value = '';
-            }
-        });
-
-        // Mobile menu toggle (if needed)
-        const mobileMenuButton = document.createElement('button');
-        mobileMenuButton.innerHTML = '☰';
-        mobileMenuButton.className = 'md:hidden text-2xl text-chocolate';
-        
-        // Add mobile menu functionality
-        const nav = document.querySelector('nav .max-w-7xl');
-        const mobileMenu = document.createElement('div');
-        mobileMenu.className = 'hidden md:hidden bg-white shadow-lg absolute top-full left-0 right-0 z-50';
-        mobileMenu.innerHTML = `
-            <div class="px-4 py-4 space-y-4">
-                <a href="#home" class="block text-chocolate hover:text-royal-purple transition">Home</a>
-                <a href="#cakes" class="block text-chocolate hover:text-royal-purple transition">Cakes</a>
-                <a href="#categories" class="block text-chocolate hover:text-royal-purple transition">Categories</a>
-                <a href="#about" class="block text-chocolate hover:text-royal-purple transition">About</a>
-                <a href="#contact" class="block text-chocolate hover:text-royal-purple transition">Contact</a>
-                <button class="bg-gradient-to-r from-cherry-red to-royal-purple text-white px-4 py-2 rounded-full hover:shadow-lg transition">
-                    🛒 Cart (0)
-                </button>
-            </div>
-        `;
-        
-        nav.appendChild(mobileMenu);
-        nav.querySelector('.flex').appendChild(mobileMenuButton);
-        
-        mobileMenuButton.addEventListener('click', function() {
-            mobileMenu.classList.toggle('hidden');
-        });
-    </script>
 </body>
 </html>
